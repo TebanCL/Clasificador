@@ -1,5 +1,5 @@
 
-package cl.diinf.usach.dene;
+package cl.usach.diinf.dene;
 
 import cl.usach.diinf.dene.Spout.TwitterSpout;
 

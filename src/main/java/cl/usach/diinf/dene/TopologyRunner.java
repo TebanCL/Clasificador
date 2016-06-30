@@ -1,5 +1,5 @@
 
-package cl.diinf.usach.dene;
+package cl.usach.diinf.dene;
 
 import backtype.storm.LocalCluster;
 import backtype.storm.topology.TopologyBuilder;
