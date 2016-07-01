@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package cl.usach.diinf.dene.Object;
 
 import com.mongodb.DB;
@@ -29,10 +25,13 @@ public class StatusPersistence implements Serializable{
     }
     
     public void saveStatus(Status s){
-        StatusMongo statusMongo = new StatusMongo();
-        statusMongo.tweetID = s.getId();
-        statusMongo.timestamp = new Date();
-        status.save(statusMongo);
+        if(s.getLang().equals("es")){
+            StatusMongo statusMongo = new StatusMongo();
+            statusMongo.tweetID = s.getId();        
+            statusMongo.tweetText = s.getText();
+            statusMongo.timestamp = new Date();
+            status.save(statusMongo);
+        }
     }
     
 }

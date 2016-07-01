@@ -24,7 +24,7 @@ public class main {
       builder.setBolt("StopwordRemover", new StopwordRemover(), 2).shuffleGrouping("LocationRecognizer");  
       builder.setBolt("TextStemmer", new TextStemmer(), 2).shuffleGrouping("StopwordRemover");      
       builder.setBolt("Labeler", new Labeler(), 2).shuffleGrouping("TextStemmer");         
-      builder.setBolt("Persistence", new Persistence(), 2).shuffleGrouping("Labeler");
+      builder.setBolt("Persistence", new Persistence(), 1).shuffleGrouping("Labeler");
       
       Config conf = new Config();
       conf.setDebug(false);
@@ -59,7 +59,6 @@ public class main {
         /*cluster.submitTopology("Deteccion-Necesidades", conf, builder.createTopology());
         Thread.sleep(10000);     
         cluster.shutdown();*/
-        
       }
     }
 }

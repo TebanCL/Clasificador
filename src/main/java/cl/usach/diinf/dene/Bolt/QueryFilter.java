@@ -9,6 +9,7 @@ import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Tuple;
 import backtype.storm.tuple.Values;
 import cl.usach.diinf.dene.Object.CurrentQueryChecker;
+import cl.usach.diinf.dene.Object.QueryExpander;
 import java.util.ArrayList;
 import java.util.Map;
 import twitter4j.Status;
@@ -24,10 +25,14 @@ import twitter4j.Status;
 public class QueryFilter implements IRichBolt{
 
     private OutputCollector collector;
+    private CurrentQueryChecker cqc;
+    private QueryExpander queryExpander;
     
     @Override
     public void prepare(Map map, TopologyContext tc, OutputCollector oc) {
         this.collector = oc;
+        cqc = new CurrentQueryChecker();
+        queryExpander = new QueryExpander();
     }
 
     @Override
@@ -36,20 +41,13 @@ public class QueryFilter implements IRichBolt{
         CurrentQueryChecker cqc = new CurrentQueryChecker();
         /*Revisa la última query*/
         cqc.check();
-        if(this.checkQueryMatch(this.expandQuery(cqc), status)){
+        
+        if(this.checkQueryMatch(queryExpander.expandQuery(cqc), status)){
             this.collector.emit(new Values(status));
         }
     }
     
-    /*Realiza la query expansion*/
-    public ArrayList<String> expandQuery(CurrentQueryChecker cqc){
-        if(cqc.getTermsList().isEmpty()){
-            return cqc.getTermsList();
-        }
-        else{
-            return cqc.getTermsList();
-        }
-    }
+    
     
     public boolean checkQueryMatch(String[] keywords, Status status){
         if(keywords.length == 0){
