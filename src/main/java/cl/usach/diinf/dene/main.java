@@ -1,13 +1,13 @@
 
 package cl.usach.diinf.dene;
 
-import cl.usach.diinf.dene.Spout.TwitterSpout;
 
 import backtype.storm.Config;
 import backtype.storm.LocalCluster;
 import backtype.storm.StormSubmitter;
 import backtype.storm.topology.TopologyBuilder;
 import cl.usach.diinf.dene.Bolt.*;
+import cl.usach.diinf.dene.Spout.TwitterSpout;
 
 public class main {
     
@@ -15,15 +15,15 @@ public class main {
 
       TopologyBuilder builder = new TopologyBuilder();
       
-      builder.setSpout("TwitterSpout", new TwitterSpout(), 2);
+      builder.setSpout("TwitterSpout", new TwitterSpout(), 1);
       
       builder.setBolt("LanguageFilter", new LanguageFilter(), 4).shuffleGrouping("TwitterSpout");
-      builder.setBolt("QueryFilter", new QueryFilter(), 4).shuffleGrouping("LanguageFilter");
-      builder.setBolt("TextNormalizer", new TextNormalizer(), 4).shuffleGrouping("QueryFilter");
-      builder.setBolt("LocationRecognizer", new LocationRecognizer(), 4).shuffleGrouping("TextNormalizer");
-      builder.setBolt("StopwordRemover", new StopwordRemover(), 2).shuffleGrouping("LocationRecognizer");  
-      builder.setBolt("TextStemmer", new TextStemmer(), 2).shuffleGrouping("StopwordRemover");      
-      builder.setBolt("Labeler", new Labeler(), 2).shuffleGrouping("TextStemmer");         
+      builder.setBolt("QueryFilter", new QueryFilter(), 2).shuffleGrouping("LanguageFilter");
+      builder.setBolt("TextNormalizer", new TextNormalizer(), 2).shuffleGrouping("QueryFilter");
+      builder.setBolt("LocationRecognizer", new LocationRecognizer(), 2).shuffleGrouping("TextNormalizer");
+      builder.setBolt("StopwordRemover", new StopwordRemover(), 1).shuffleGrouping("LocationRecognizer");  
+      builder.setBolt("TextStemmer", new TextStemmer(), 1).shuffleGrouping("StopwordRemover");      
+      builder.setBolt("Labeler", new Labeler(), 1).shuffleGrouping("TextStemmer");         
       builder.setBolt("Persistence", new Persistence(), 1).shuffleGrouping("Labeler");
       
       Config conf = new Config();

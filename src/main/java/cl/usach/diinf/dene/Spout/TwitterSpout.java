@@ -51,25 +51,19 @@ public class TwitterSpout extends BaseRichSpout {
         StatusListener listener = new StatusListener() {
             @Override
             public void onStatus(Status status) {      
-                queue.offer(status);
-                
-            }
-					
+                queue.offer(status); 
+            }					
             @Override
-            public void onDeletionNotice(StatusDeletionNotice sdn) {}
-					
+            public void onDeletionNotice(StatusDeletionNotice sdn) {}					
             @Override
             public void onTrackLimitationNotice(int i) {
                 System.out.println("ATENCIÓN: ¡Límite alcanzado! No se recibirán estados por un tiempo.");
-            }
-					
+            }					
             @Override
-            public void onScrubGeo(long l, long l1) {}
-					
+            public void onScrubGeo(long l, long l1) {}					
             @Override
             public void onException(Exception ex) {
-            }
-					
+            }					
             @Override
             public void onStallWarning(StallWarning arg0) {
             }
@@ -90,16 +84,22 @@ public class TwitterSpout extends BaseRichSpout {
 			
    @Override
    public void nextTuple() {
-      
+        //Mientras la cola no esté vacía.
+        while(queue.isEmpty()){
+            Utils.sleep(50);
+        }
         Status status = queue.poll();       
         
         if (status == null) {
            Utils.sleep(50);
         } else {
+            /*
+                Guarde los ID y fecha de recepción del estado, 
+                luego emite a la topología.
+            */
            statusPersistence.saveStatus(status);
            _collector.emit(new Values(status));
-        }
-        
+        }        
    }
 			
    @Override
@@ -124,8 +124,8 @@ public class TwitterSpout extends BaseRichSpout {
    }
    
    private void initKeys(){
-        this.consumerKey = "GdtsLzWnEawcUi1EyBDFirLcY";
-        this.consumerSecret = "hzC30tht6Ms1U6JIt8Fi0D0MouE5TWijKaKqxGn5Dv4urzAhvx";
+        this.consumerKey = "hckngBRu0t0FRQBFzhe3umvgY";
+        this.consumerSecret = "hAn8cNktJmYwYQRzwZaDXGkKj8pkMGaVQ3FrV9O9Hw0SlIjtrD";
         this.accessToken = "361365793-b17furLZppeNh9pu1CHLnIZqje8RGJcuFTvvKkpG";
         this.accessTokenSecret = "Vd7O5rTMf2KcF6pILeQuVVZyoubmuUAs7yKEQUV0hLn1i";
    }
