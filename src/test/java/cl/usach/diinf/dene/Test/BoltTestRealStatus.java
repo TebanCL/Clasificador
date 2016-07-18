@@ -56,7 +56,6 @@ public class BoltTestRealStatus{
         assert(this.Normalizer(statusGenerator.first) && this.Normalizer(statusGenerator.second) && this.Normalizer(statusGenerator.third) && this.Normalizer(statusGenerator.fourth));
     }
     
-    
     @Test
     public void testStopword(){
         assert(this.Stopword(statusGenerator.first) && this.Stopword(statusGenerator.second) && this.Stopword(statusGenerator.third) && this.Stopword(statusGenerator.fourth));
@@ -74,13 +73,13 @@ public class BoltTestRealStatus{
         
         System.out.println(">>> Comenzando prueba:");
         inputNumber = statuses.size();
-        start = System.nanoTime()/1000;
+        start = System.nanoTime();
         for(Status s : statuses){
             if(s.getLang().equals("es")){
                 outputNumber++;
             }
         }
-        end = System.nanoTime()/1000;
+        end = System.nanoTime();
         
         long elapsedTime = end - start;
         int items = inputNumber - outputNumber;
@@ -123,7 +122,7 @@ public class BoltTestRealStatus{
         
         inputNumber = statuses.size();
         System.out.println(">>> Comenzando prueba:");
-        start = System.nanoTime()/1000;
+        start = System.nanoTime();
         for(Status s: statuses){
             String content = s.getText();
             content = content.toLowerCase();
@@ -133,7 +132,7 @@ public class BoltTestRealStatus{
                 }
             }
         }
-        end = System.nanoTime()/1000;
+        end = System.nanoTime();
         
         long elapsedTime = end - start;
         int items = inputNumber - outputNumber;
@@ -170,7 +169,7 @@ public class BoltTestRealStatus{
         inputNumber = statuses.size();
         System.out.println(">>> Comenzando prueba:");
         
-        start = System.nanoTime()/1000;
+        start = System.nanoTime();
         for(Status status: statuses){
             String textWOStopword = "";
             List<String> cS = new ArrayList();
@@ -187,7 +186,7 @@ public class BoltTestRealStatus{
             } 
             outputNumber++;
         }
-        end = System.nanoTime()/1000;
+        end = System.nanoTime();
         
         long elapsedTime = end - start;
         int items = inputNumber - outputNumber;
@@ -223,12 +222,12 @@ public class BoltTestRealStatus{
         
         inputNumber = statuses.size();
         
-        start = System.nanoTime()/1000;
+        start = System.nanoTime();
         for(Status status: statuses){
             String normalizedText = textNormalizer.normalizeText(123, status.getText());
             outputNumber++;
         }
-        end = System.nanoTime()/1000;
+        end = System.nanoTime();
         
         long elapsedTime = end - start;
         int items = inputNumber - outputNumber;

@@ -30,7 +30,8 @@ public class Location implements Serializable{
         this.name = n;
         this.latitud = lat;
         this.longitud = lon;
-        this.generatedAt = null;
+        this.generatedAt = new Date();
+        this.content = "";
     }
 
     /**

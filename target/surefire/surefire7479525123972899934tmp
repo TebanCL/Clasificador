@@ -1,0 +1,10 @@
+#surefire
+#Sun Jul 17 23:13:35 CLT 2016
+maven.ext.class.path=C\:\\Program Files\\NetBeans 8.1\\java\\maven-nblib\\netbeans-eventspy.jar
+exec.args=-agentpath\:"C\:/Program Files/NetBeans 8.1/profiler/lib/deployed/jdk16/windows-amd64/profilerinterface.dll"\="C\:\\Program Files\\NetBeans 8.1\\profiler\\lib",5140,10 -XX\:+HeapDumpOnOutOfMemoryError -XX\:HeapDumpPath\=C\:\\Users\\ein\\Desktop\\Memoria\\DeNe-Core\\nbproject\\private\\profiler  
+maven.surefire.debug=${exec.args}
+user.dir=C\:\\Users\\ein\\Desktop\\Memoria\\DeNe-Core
+localRepository=C\:\\Users\\ein\\.m2\\repository
+forkMode=once
+basedir=C\:\\Users\\ein\\Desktop\\Memoria\\DeNe-Core
+test=cl.usach.diinf.dene.Test.SystemTest

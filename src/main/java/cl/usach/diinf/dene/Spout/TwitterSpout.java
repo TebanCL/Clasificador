@@ -19,6 +19,7 @@ import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Values;
 import backtype.storm.utils.Utils;
 import cl.usach.diinf.dene.Object.StatusPersistence;
+import java.util.Date;
 
 /**
  * Recolecta desde Twitter estados que se generan en tiempo real.
@@ -28,7 +29,9 @@ public class TwitterSpout extends BaseRichSpout {
    private SpoutOutputCollector _collector;
    private LinkedBlockingQueue<Status> queue = null;
    private TwitterStream _twitterStream;
-		
+   private int elementCounter;
+   private Long end;
+   private Long init;
    private String consumerKey;
    private String consumerSecret;
    private String accessToken;
@@ -44,7 +47,9 @@ public class TwitterSpout extends BaseRichSpout {
    @Override
    public void open(Map conf, TopologyContext context,
       SpoutOutputCollector collector) {
-       
+       init = System.currentTimeMillis();
+       end = init;
+       elementCounter = 0;
         statusPersistence = new StatusPersistence();
         queue = new LinkedBlockingQueue<>(1000);
         _collector = collector;
@@ -52,12 +57,15 @@ public class TwitterSpout extends BaseRichSpout {
             @Override
             public void onStatus(Status status) {      
                 queue.offer(status); 
+                end = System.currentTimeMillis();
+                elementCounter++;
             }					
             @Override
             public void onDeletionNotice(StatusDeletionNotice sdn) {}					
             @Override
             public void onTrackLimitationNotice(int i) {
                 System.out.println("ATENCIÓN: ¡Límite alcanzado! No se recibirán estados por un tiempo.");
+                System.out.println("EVENTOS: "+elementCounter);
             }					
             @Override
             public void onScrubGeo(long l, long l1) {}					
@@ -97,6 +105,9 @@ public class TwitterSpout extends BaseRichSpout {
                 Guarde los ID y fecha de recepción del estado, 
                 luego emite a la topología.
             */
+            /*System.out.println("Estado:" + status.getText());
+            System.out.println("Contador Actual: " + elementCounter);
+            System.out.println("Tiempo (ms): " + (end - init));*/
            statusPersistence.saveStatus(status);
            _collector.emit(new Values(status));
         }        

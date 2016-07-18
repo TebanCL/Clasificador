@@ -4,6 +4,7 @@ package cl.usach.diinf.dene;
 import backtype.storm.LocalCluster;
 import backtype.storm.topology.TopologyBuilder;
 import backtype.storm.Config;
+import java.util.Date;
 
 /**
  *
@@ -22,7 +23,7 @@ public class TopologyRunner {
     }
     
     public void Run() throws InterruptedException{
-        cluster.submitTopology("Deteccion-Necesidades", conf, builder.createTopology());
+        cluster.submitTopology("Deteccion-Necesidades"+(new Date().getTime()), conf, builder.createTopology());
         Thread.sleep(10000);
     }
     

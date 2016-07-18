@@ -7,6 +7,7 @@ import backtype.storm.LocalCluster;
 import backtype.storm.StormSubmitter;
 import backtype.storm.topology.TopologyBuilder;
 import cl.usach.diinf.dene.Bolt.*;
+import cl.usach.diinf.dene.Object.FakeStatusSpout;
 import cl.usach.diinf.dene.Spout.TwitterSpout;
 
 public class main {
@@ -15,7 +16,7 @@ public class main {
 
       TopologyBuilder builder = new TopologyBuilder();
       
-      builder.setSpout("TwitterSpout", new TwitterSpout(), 1);
+      builder.setSpout("TwitterSpout", new FakeStatusSpout(), 1);
       
       builder.setBolt("LanguageFilter", new LanguageFilter(), 4).shuffleGrouping("TwitterSpout");
       builder.setBolt("QueryFilter", new QueryFilter(), 2).shuffleGrouping("LanguageFilter");
@@ -33,32 +34,32 @@ public class main {
       CASO: Ejecutando en cluster.
       */
       if (args != null && args.length > 0) {
-        conf.setNumWorkers(3);
+        conf.setNumWorkers(4);
         StormSubmitter.submitTopology(args[0], conf, builder.createTopology());
       }
       /*
       CASO: Probando de manera local.
       */
       else {
-        conf.setMaxTaskParallelism(3);
+        conf.setMaxTaskParallelism(4);
         LocalCluster cluster = new LocalCluster();
         
         final TopologyRunner topologyRunner = new TopologyRunner(cluster, conf, builder);
         
-        Runtime.getRuntime().addShutdownHook(new Thread() {
+        /*Runtime.getRuntime().addShutdownHook(new Thread() {
             @Override
             public void run() {
                 System.out.println("=== SHUTTING DOWN LOCAL CLUSTER ===");
                 topologyRunner.ShutDown();
             }
-        });
+        });*/
         
-        while(true){
+        //while(true){
             topologyRunner.Run();
-        }
+        //}
         /*cluster.submitTopology("Deteccion-Necesidades", conf, builder.createTopology());
-        Thread.sleep(10000);     
-        cluster.shutdown();*/
+        Thread.sleep(40000);     
+        /*cluster.shutdown();*/
       }
     }
 }

@@ -1,0 +1,7 @@
+#surefire
+#Sun Jul 17 22:21:10 CLT 2016
+maven.ext.class.path=C\:\\Program Files\\NetBeans 8.1\\java\\maven-nblib\\netbeans-eventspy.jar
+user.dir=C\:\\Users\\ein\\Desktop\\Memoria\\DeNe-Core
+localRepository=C\:\\Users\\ein\\.m2\\repository
+basedir=C\:\\Users\\ein\\Desktop\\Memoria\\DeNe-Core
+test=cl.usach.diinf.dene.Test.SystemTest

@@ -25,9 +25,13 @@ public class Persistence implements IRichBolt{
         DB db;
         Jongo jongo;
         MongoCollection markers;
+        private int elementCounter = 0;
+        private OutputCollector collector;
+        private int inputCounter = 0;
     
     @Override
     public void prepare(Map map, TopologyContext tc, OutputCollector oc) {
+        this.collector = oc;
         db = new MongoClient().getDB("DeNe-test");
         jongo = new Jongo(db);
         markers = jongo.getCollection("markers");        
@@ -38,20 +42,25 @@ public class Persistence implements IRichBolt{
         /* Guarda en BD un objeto con la latitud, longitud, categoria y contenido del tweet */
         Status status = (Status) tuple.getValueByField("status");
         String categoria = (String) tuple.getValueByField("category");
-        ArrayList<Double> locations = (ArrayList<Double>) tuple.getValueByField("location");
-        
+        Double latitud = (Double) tuple.getValueByField("latitud");
+        Double longitud = (Double) tuple.getValueByField("longitud");
+        inputCounter++;
         Marker m = new Marker();
         m.categoria = categoria;
         m.contenido = status.getText();
-        m.userID = String.valueOf(status.getUser().getId());
-        m.latitud = locations.get(0);
-        m.longitud = locations.get(1);
+        //m.userID = String.valueOf(status.getUser().getId());
+        m.latitud = latitud;
+        m.longitud = longitud;
         m.generatedAt = new Date();
+        elementCounter++;
         markers.save(m);
+        this.collector.ack(tuple);
     }
 
     @Override
     public void cleanup() {    
+        
+       System.out.println("Elementos recibidos PERSISTENCE: "+inputCounter+"\nEstados emitidos PERSISTENCE: " + elementCounter);
     }
 
     @Override

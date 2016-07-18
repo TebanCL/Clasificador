@@ -41,17 +41,18 @@ import twitter4j.Status;
  * @author teban
  */
 public class LocationRecognizer implements IRichBolt{
-
+    private int inputCounter = 0;
+    private int elementCounter = 0;
     private OutputCollector collector;
     List<Location> chileanLocations = new ArrayList<>();
-    ArrayList<Double> locations = new ArrayList();
     @Override
     public void prepare(Map map, TopologyContext tc, OutputCollector oc) {
+        this.collector = oc;
         try(BufferedReader br = new BufferedReader(new FileReader("C:/DeNe/CL.txt"))) {
             String line = br.readLine();
             while (line != null) {
                 String[] lr = line.split(";");
-                this.chileanLocations.add(new Location(lr[0],Double.parseDouble(lr[1]),Double.parseDouble(lr[2])));;
+                this.chileanLocations.add(new Location(lr[0],Double.parseDouble(lr[1]),Double.parseDouble(lr[2])));
                 line = br.readLine();
             }
         } catch (IOException ex) {
@@ -61,58 +62,54 @@ public class LocationRecognizer implements IRichBolt{
 
     @Override
     public void execute(Tuple tuple) {
+        inputCounter++;
+        //ArrayList<Double> locations = new ArrayList();
         Status status = (Status) tuple.getValueByField("status");
-        String normalizedText = (String) tuple.getValueByField("normalizedText");
-        double lat = 0.0, lon = 0.0;
-        if(null==status.getGeoLocation()){
-            //Caso No Geolocalizado
-            String content = status.getText();
-            content = content.toLowerCase();
-            for(Location l : this.chileanLocations){
-                if(content.contains(l.getName().toLowerCase())){
-                    //Si habla de chile...
-                        locations.add(l.getLatitud());
-                        locations.add(l.getLongitud());
-                    break;
-                }
-            }
-            if(lat != 0.0 && lon != 0.0){
-                //-----------------------------------
-                this.collector.emit(new Values(status, normalizedText, locations));
-            }
-            //Si no habla de Chile, se olvida.
+        String normalizedText = (String) tuple.getValueByField("text");
+        if(normalizedText==null){
+            normalizedText = "";
         }
-        else{
-            //Caso Geolocalizado
-            if(this.isInChile(status.getGeoLocation().getLatitude(), status.getGeoLocation().getLongitude())){
-                //Dentro de chile y habla de chile?
-                String content = status.getText();
-                content = content.toLowerCase();
-                for(Location l : this.chileanLocations){
-                    if(content.contains(l.getName().toLowerCase())){
-                        locations.add(l.getLatitud());
-                        locations.add(l.getLongitud());
-                        break;
-                    }
+        double lat = 0.0, lon = 0.0;
+        try{
+            if(status.getGeoLocation() == null){
+            for(Location l: this.chileanLocations){
+                String content = status.getText().toLowerCase();
+                content = content.replace("á", "a");
+                content = content.replace("é", "e");
+                content = content.replace("í", "i");
+                content = content.replace("ó", "o");
+                content = content.replace("ú", "u");
+                String locationName = l.getName().toLowerCase();
+                if(content.contains(locationName)){ 
+                    /*locations.add(l.getLatitud());
+                    locations.add(l.getLongitud());
+                    */
+                    elementCounter++;
+                    System.out.println("UBICACION - Emitidos: "+elementCounter);
+                    this.collector.emit(new Values(status, normalizedText, l.getLatitud(), l.getLongitud()));
                 }
-                this.collector.emit(new Values(status, normalizedText, locations));
+                // SINO NO EMITE NADA
+            }
             }
             else{
-                //Dentro de chile y no habla de chile?
-                System.out.println("Dentro de chile, pero no habla de algun lugar en particular");
-                this.collector.emit(new Values(status, normalizedText, locations));
+                /*locations.add(status.getGeoLocation().getLatitude());
+                locations.add(status.getGeoLocation().getLongitude());*/
+                elementCounter++;
+                this.collector.emit(new Values(status, normalizedText, status.getGeoLocation().getLatitude(), status.getGeoLocation().getLongitude()));
             }
         }
+        catch(NullPointerException e){       
+        }          
     }
 
     @Override
     public void cleanup() {
-
+       System.out.println("Elementos recibidos UBICACION: "+inputCounter+"\nEstados emitidos UBICACION: " + elementCounter);
     }
 
     @Override
     public void declareOutputFields(OutputFieldsDeclarer ofd) {
-        ofd.declare(new Fields("status", "normalizedText", "locations"));
+        ofd.declare(new Fields("status", "text", "latitud", "longitud"));
     }
 
     @Override

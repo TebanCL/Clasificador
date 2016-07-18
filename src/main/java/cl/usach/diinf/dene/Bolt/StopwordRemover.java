@@ -21,49 +21,57 @@ import twitter4j.Status;
 public class StopwordRemover implements IRichBolt {
 
     List<String> stopwords;
-            
+    private int inputCounter = 0;
     private OutputCollector collector;
-
+    private int elementCounter = 0;
+    
     @Override
     public void prepare(Map map, TopologyContext tc, OutputCollector oc) {
-        this.collector = oc;
-        
+        this.collector = oc;        
         StopwordDictionary stopworddictionary = new StopwordDictionary();
         this.stopwords = stopworddictionary.getStopwordsAsArrayList();
-        
     }
 
     @Override
     public void execute(Tuple tuple) {
-        Status status = (Status) tuple.getValueByField("Status");
-        String normalizedText = (String) tuple.getValueByField("normalizedText");
-        ArrayList<Double> locations = (ArrayList<Double>) tuple.getValueByField("locations");
-       
-        String textWOStopword = "";
-        List<String> cS = new ArrayList();
+        Status status = (Status) tuple.getValueByField("status");
+        String normalizedText = (String) tuple.getValueByField("text");
+        Double latitud = (Double) tuple.getValueByField("latitud");
+        Double longitud = (Double) tuple.getValueByField("longitud");
+        inputCounter++;
+        String text = "";
+        ArrayList<String> cS = new ArrayList();
         for(String s : normalizedText.split(" "))
         {
             cS.add(s);
         }
         //cS.addAll(Arrays.asList(contenido.split(" ")));
         for(String s : cS){
-            if(!stopwords.contains(s.toLowerCase()))
-            {
-                textWOStopword+=s+" ";
+            boolean flag = false;
+            for(String t: stopwords){
+                if(t.equals(t)){
+                    flag = true;
+                }
+            }
+            if(!flag){
+                text+=" "+s;
             }
         } 
-        
-        this.collector.emit(new Values(status, textWOStopword, locations));
+        elementCounter++;
+        System.out.println("STOPWORD - Emitidos: "+elementCounter);
+        this.collector.emit(new Values(status, text, latitud, longitud));
         
     }
 
     @Override
     public void cleanup() {
+        
+       System.out.println("Elementos recibidos STOPWORD: "+inputCounter+"\nEstados emitidos STOPWORD: " + elementCounter);
     }
 
     @Override
     public void declareOutputFields(OutputFieldsDeclarer ofd) {
-        ofd.declare(new Fields("status", "textWOStopword", "locations"));
+        ofd.declare(new Fields("status", "text", "latitud", "longitud"));
     }
 
     @Override

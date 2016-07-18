@@ -73,13 +73,13 @@ public class BoltTest{
         }
         System.out.println(">>> Comenzando prueba:");
         inputNumber = statuses.size();
-        start = System.nanoTime()/1000;
+        start = System.nanoTime()/1000000;
         for(Status s : statuses){
             if(s.getLang().equals("es")){
                 outputNumber++;
             }
         }
-        end = System.nanoTime()/1000;
+        end = System.nanoTime()/1000000;
         
         long elapsedTime = end - start;
         int items = inputNumber - outputNumber;
@@ -125,7 +125,7 @@ public class BoltTest{
         
         inputNumber = statuses.size();
         System.out.println(">>> Comenzando prueba:");
-        start = System.nanoTime()/1000;
+        start = System.nanoTime();
         for(Status s: statuses){
             String content = s.getText();
             content = content.toLowerCase();
@@ -135,7 +135,7 @@ public class BoltTest{
                 }
             }
         }
-        end = System.nanoTime()/1000;
+        end = System.nanoTime();
         
         long elapsedTime = end - start;
         int items = inputNumber - outputNumber;
@@ -176,7 +176,7 @@ public class BoltTest{
         inputNumber = statuses.size();
         System.out.println(">>> Comenzando prueba:");
         
-        start = System.nanoTime()/1000;
+        start = System.nanoTime();
         for(Status status: statuses){
             String textWOStopword = "";
             List<String> cS = new ArrayList();
@@ -193,7 +193,7 @@ public class BoltTest{
             } 
             outputNumber++;
         }
-        end = System.nanoTime()/1000;
+        end = System.nanoTime();
         
         long elapsedTime = end - start;
         int items = inputNumber - outputNumber;
@@ -232,12 +232,12 @@ public class BoltTest{
         
         inputNumber = statuses.size();
         
-        start = System.nanoTime()/1000;
+        start = System.nanoTime();
         for(Status status: statuses){
             String normalizedText = textNormalizer.normalizeText(123, status.getText());
             outputNumber++;
         }
-        end = System.nanoTime()/1000;
+        end = System.nanoTime();
         
         long elapsedTime = end - start;
         int items = inputNumber - outputNumber;

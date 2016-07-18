@@ -22,8 +22,9 @@ import twitter4j.Status;
  * De no haber términos pasan todos.
  * @author Teban
  */
-public class QueryFilter implements IRichBolt{
-
+public class QueryFilter implements IRichBolt{  
+    private int inputCounter = 0;
+    private int elementCounter = 0;
     private OutputCollector collector;
     private CurrentQueryChecker cqc;
     private QueryExpander queryExpander;
@@ -37,17 +38,18 @@ public class QueryFilter implements IRichBolt{
 
     @Override
     public void execute(Tuple tuple) {
+        inputCounter++;
         Status status = (Status) tuple.getValueByField("status");
-        CurrentQueryChecker cqc = new CurrentQueryChecker();
+        //CurrentQueryChecker cqc = new CurrentQueryChecker();
         /*Revisa la última query*/
         cqc.check();
         
-        if(this.checkQueryMatch(queryExpander.expandQuery(cqc), status)){
+        if(this.checkQueryMatch(queryExpander.expandQuery(cqc), status)){           
+            elementCounter++;       
+            System.out.println("QUERY - Emitidos: "+elementCounter);
             this.collector.emit(new Values(status));
         }
     }
-    
-    
     
     public boolean checkQueryMatch(String[] keywords, Status status){
         if(keywords.length == 0){
@@ -74,8 +76,8 @@ public class QueryFilter implements IRichBolt{
     }
 
     @Override
-    public void cleanup() {
-    //
+    public void cleanup() { 
+        System.out.println("Elementos recibidos CONSULTA: "+inputCounter+"\nEstados emitidos CONSULTA: " + elementCounter);
     }
 
     @Override

@@ -20,6 +20,8 @@ import twitter4j.Status;
 public class TextStemmer implements IRichBolt{
 
     private OutputCollector collector;
+    private int elementCounter = 0;
+    private int inputCounter = 0;
     
     @Override
     public void prepare(Map map, TopologyContext tc, OutputCollector oc) {
@@ -28,11 +30,12 @@ public class TextStemmer implements IRichBolt{
 
     @Override
     public void execute(Tuple tuple) {
-        Status status = (Status) tuple.getValueByField("Status");
-        String textWOStopword = (String) tuple.getValueByField("textWOStopword");
-        ArrayList<Double> locations = (ArrayList<Double>) tuple.getValueByField("locations");
-        
-        String[] text2BStemmed = textWOStopword.split(" ");
+        Status status = (Status) tuple.getValueByField("status");
+        String text = (String) tuple.getValueByField("text");
+        Double latitud = (Double) tuple.getValueByField("latitud");
+        Double longitud = (Double) tuple.getValueByField("longitud");
+        inputCounter++;
+        String[] text2BStemmed = text.split(" ");
         String stemmedText = "";
         
         Stemmer stemmer = new Stemmer();
@@ -40,18 +43,20 @@ public class TextStemmer implements IRichBolt{
         for(String s: text2BStemmed){
             stemmedText += stemmer.stemm(s) + " ";
         }
-        
-        this.collector.emit(new Values(status, stemmedText, locations));
+        elementCounter++;
+        System.out.println("STEMMER - Emitidos: "+elementCounter);
+        this.collector.emit(new Values(status, stemmedText, latitud, longitud));
     }
 
     @Override
     public void cleanup() {
-    //
+    
+       System.out.println("Elementos recibidos STEMMER: "+inputCounter+"\nEstados emitidos STEMMER: " + elementCounter);
     }
 
     @Override
     public void declareOutputFields(OutputFieldsDeclarer ofd) {
-        ofd.declare(new Fields("status", "stemmedText", "locations"));
+        ofd.declare(new Fields("status", "text", "latitud", "longitud"));
     }
 
     @Override
