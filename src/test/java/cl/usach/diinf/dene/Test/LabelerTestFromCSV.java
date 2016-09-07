@@ -1,19 +1,20 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package cl.usach.diinf.dene.Bolt;
 
-import backtype.storm.task.OutputCollector;
-import backtype.storm.task.TopologyContext;
-import backtype.storm.topology.IRichBolt;
-import backtype.storm.topology.OutputFieldsDeclarer;
-import backtype.storm.tuple.Fields;
-import backtype.storm.tuple.Tuple;
-import backtype.storm.tuple.Values;
+package cl.usach.diinf.dene.Test;
+import cc.mallet.classify.Classification;
 import cc.mallet.classify.Classifier;
+import cc.mallet.pipe.CharSequence2TokenSequence;
+import cc.mallet.pipe.FeatureSequence2FeatureVector;
+import cc.mallet.pipe.Input2CharSequence;
+import cc.mallet.pipe.Pipe;
+import cc.mallet.pipe.PrintInputAndTarget;
+import cc.mallet.pipe.SerialPipes;
+import cc.mallet.pipe.Target2Label;
+import cc.mallet.pipe.TokenSequence2FeatureSequence;
+import cc.mallet.pipe.TokenSequenceLowercase;
 import cc.mallet.pipe.iterator.CsvIterator;
+import cc.mallet.types.Instance;
+import cc.mallet.types.InstanceList;
+import cc.mallet.types.Label;
 import cc.mallet.types.Labeling;
 import cl.usach.diinf.dene.Object.MalletUtility;
 import java.io.File;
@@ -22,68 +23,42 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import twitter4j.Status;
+import java.util.regex.Pattern;
+import org.junit.Test;
 
 /**
+ *
  * @author Teban
  */
-public class Labeler implements IRichBolt{
-    
-    private int elementCounter = 0;
-    private int inputCounter = 0;
-    private OutputCollector collector;
+public class LabelerTestFromCSV {
+    private String text;
     private Classifier clasificador;
+    Instance instancia;
     
-    @Override
-    public void prepare(Map map, TopologyContext tc, OutputCollector oc) {
-        this.collector = oc;
+    public LabelerTestFromCSV() throws IOException, ClassNotFoundException{
+        text = "estamos bien en el refugio los treintaitres";
         try {
             clasificador = new MalletUtility().readClassifier();            
         } catch (IOException | ClassNotFoundException ex) {
-        }
-    }
-
-    @Override
-    public void execute(Tuple tuple) {
-        Status status = (Status) tuple.getValueByField("status");
-        String text = (String) tuple.getValueByField("text");
-        Double latitud = (Double) tuple.getValueByField("latitud");
-        Double longitud = (Double) tuple.getValueByField("longitud");
-        inputCounter++;
-        String category = "None";
-        try {
-            category = this.getLabel(text);
-        } catch (IOException ex) {
-            Logger.getLogger(Labeler.class.getName()).log(Level.SEVERE, null, ex);
-        }        
-        elementCounter++;
-        System.out.println("LABELER - Emitidos: "+elementCounter);
-        this.collector.emit(new Values(status, category, latitud, longitud));
-        
+            System.out.println("CRITICAL: CANNOT READ CLASSIFIER!!!");
+        } 
+        instancia = new Instance(text, "", ""+(new Date().getTime()), text);
+       int i = 0; 
     }
     
-    @Override
-    public void cleanup() {
-       System.out.println("Elementos recibidos ETIQUETADOR: "+inputCounter+"\nEstados emitidos ETIQUETADOR: " + elementCounter);
-    }
-
-    @Override
-    public void declareOutputFields(OutputFieldsDeclarer ofd) {
-        ofd.declare(new Fields("status", "category", "latitud", "longitud"));
-    }
-
-    @Override
-    public Map<String, Object> getComponentConfiguration() {
-        return null;
+    @Test
+    public void labelTest() throws IOException{
+        System.out.println("Etiqueta: "+this.getLabel(text));
+        System.out.println("");
+        assert(true);
     }
     
     public String getLabel(String textContent) throws IOException{
         File file = this.instance2File(textContent);
-        String result = this.label2String(clasificador, file);
+        String result = this.getLabel(clasificador, file);
         if(!this.deleteTemporalFile(file)){
             System.out.println("El archivo "+file.getName()+" no pudo ser eliminado. Eliminelo manualmente, por favor.");
         }
@@ -103,7 +78,7 @@ public class Labeler implements IRichBolt{
         return temporalFile.delete();
     }
     
-    public String label2String(Classifier classifier, File file) throws IOException {
+    public String getLabel(Classifier classifier, File file) throws IOException {
 
         String label = "";        
         // Create a new iterator that will read raw instance data from                                     
@@ -118,7 +93,11 @@ public class Labeler implements IRichBolt{
         CsvIterator reader =
             new CsvIterator(r,
                             "(\\w+)\\s+(\\w+)\\s+(.*)",
-                            3, 2, 1);  // (data, label, name) field indices                  
+                            3, 2, 1);  // (data, label, name) field indices               
+
+        
+        
+        
         // Create an iterator that will pass each instance through                                         
         //  the same pipe that was used to create the training data                                        
         //  for the classifier.                                                                            
@@ -135,14 +114,18 @@ public class Labeler implements IRichBolt{
             //System.out.println(labeling.getBestLabel());
             // print the labels with their weights in descending order (ie best first)                     
 
-            /*for (int rank = 0; rank < labeling.numLocations(); rank++){
+            for (int rank = 0; rank < labeling.numLocations(); rank++){
                 System.out.print(labeling.getLabelAtRank(rank) + ":" +
                                  labeling.getValueAtRank(rank) + " ");
             }
-            System.out.println();*/
+            System.out.println();
 
         }
         r.close();
         return label;
     }
+    
+    
+    
+    
 }
