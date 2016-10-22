@@ -34,25 +34,25 @@ public class BoltTest{
         statusGenerator = new FakeStatusGenerator();
     }
     
-    @Test
+    //@Test
     public void testLanguage(){
         System.out.println("PRUEBA IDIOMA.");
         assert(Language(reader.getQuarterFile()) && Language(reader.getHalfFile()) && Language(reader.getFullFile()));
     }
     
-    @Test
+    //@Test
     public void testLocation(){
         System.out.println("PRUEBA UBICACION.");
         assert(Location(reader.getQuarterFile()) && Location(reader.getHalfFile()) && Location(reader.getFullFile()));
     }
     
-    @Test
+    //@Test
     public void testNormalizer(){
         System.out.println("PRUEBA NORMALIZADOR.");
         assert(Normalizer(reader.getQuarterFile()) && Normalizer(reader.getHalfFile()) && Normalizer(reader.getFullFile()));
     }
     
-    @Test
+    //@Test
     public void testStopword(){
         System.out.println("PRUEBA STOPWORD.");
         assert(Stopword(reader.getQuarterFile()) && Stopword(reader.getHalfFile()) && Stopword(reader.getFullFile()));

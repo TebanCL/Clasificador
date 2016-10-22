@@ -94,9 +94,27 @@ public class LocationRecognizer implements IRichBolt{
             else{
                 /*locations.add(status.getGeoLocation().getLatitude());
                 locations.add(status.getGeoLocation().getLongitude());*/
-                elementCounter++;
-                this.collector.emit(new Values(status, normalizedText, status.getGeoLocation().getLatitude(), status.getGeoLocation().getLongitude()));
-            }
+                for(Location l: this.chileanLocations){
+                    String content = status.getText().toLowerCase();
+                    content = content.replace("á", "a");
+                    content = content.replace("é", "e");
+                    content = content.replace("í", "i");
+                    content = content.replace("ó", "o");
+                    content = content.replace("ú", "u");
+                    String locationName = l.getName().toLowerCase();
+                    if(content.contains(locationName)){ 
+                        /*locations.add(l.getLatitud());
+                        locations.add(l.getLongitud());
+                        */
+                        elementCounter++;
+                        System.out.println("UBICACION - Emitidos: "+elementCounter);
+                        this.collector.emit(new Values(status, normalizedText, l.getLatitud(), l.getLongitud()));
+                    }
+                    elementCounter++;
+                    this.collector.emit(new Values(status, normalizedText, status.getGeoLocation().getLatitude(), status.getGeoLocation().getLongitude()));
+ 
+                }
+                }
         }
         catch(NullPointerException e){       
         }          

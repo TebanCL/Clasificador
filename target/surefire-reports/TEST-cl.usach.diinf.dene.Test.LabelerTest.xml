@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite tests="1" failures="1" name="cl.usach.diinf.dene.Test.LabelerTest" time="2.485" errors="0" skipped="0">
+<testsuite tests="1" failures="0" name="cl.usach.diinf.dene.Test.LabelerTest" time="0.328" errors="1" skipped="0">
   <properties>
     <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
     <property name="sun.boot.library.path" value="C:\Program Files\Java\jdk1.8.0_73\jre\bin"/>
@@ -30,13 +30,11 @@
     <property name="maven.ext.class.path" value="C:\Program Files\NetBeans 8.1\java\maven-nblib\netbeans-eventspy.jar"/>
     <property name="classworlds.conf" value="C:\Program Files\NetBeans 8.1\java\maven\bin\m2.conf"/>
     <property name="sun.jnu.encoding" value="Cp1252"/>
-    <property name="java.library.path" value="C:\Program Files\Java\jdk1.8.0_73\bin;C:\WINDOWS\Sun\Java\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\ProgramData\Oracle\Java\javapath;C:\Program Files (x86)\Intel\iCLS Client\;C:\Program Files\Intel\iCLS Client\;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files\Intel\Intel(R) Management Engine Components\IPT;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\Program Files\Java\jdk1.8.0_73\bin;C:\Program Files (x86)\MiKTeX 2.9\miktex\bin\;C:\Maven\bin;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files (x86)\Skype\Phone\;C:\Users\ein\AppData\Local\Programs\MiKTeX 2.9\miktex\bin\;."/>
+    <property name="java.library.path" value="C:\Program Files\Java\jdk1.8.0_73\bin;C:\WINDOWS\Sun\Java\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\ProgramData\Oracle\Java\javapath;C:\Program Files (x86)\Intel\iCLS Client\;C:\Program Files\Intel\iCLS Client\;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files\Intel\Intel(R) Management Engine Components\IPT;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\Program Files\Java\jdk1.8.0_73\bin;C:\Program Files (x86)\MiKTeX 2.9\miktex\bin\;C:\Maven\bin;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files (x86)\Skype\Phone\;C:\Program Files (x86)\Windows Live\Shared;C:\Users\ein\AppData\Local\Programs\MiKTeX 2.9\miktex\bin\;."/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
     <property name="java.class.version" value="52.0"/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="os.version" value="10.0"/>
-    <property name="jpda.listen" value="true"/>
-    <property name="jpda.address" value="52659"/>
     <property name="user.home" value="C:\Users\ein"/>
     <property name="user.timezone" value="America/Santiago"/>
     <property name="java.awt.printerjob" value="sun.awt.windows.WPrinterJob"/>
@@ -44,11 +42,10 @@
     <property name="file.encoding" value="Cp1252"/>
     <property name="user.name" value="Teban"/>
     <property name="java.class.path" value="C:\Program Files\NetBeans 8.1\java\maven\boot\plexus-classworlds-2.4.jar"/>
-    <property name="maven.surefire.debug" value="-Xdebug -Xrunjdwp:transport=dt_socket,server=n,address=52659"/>
     <property name="java.vm.specification.version" value="1.8"/>
     <property name="sun.arch.data.model" value="64"/>
     <property name="java.home" value="C:\Program Files\Java\jdk1.8.0_73\jre"/>
-    <property name="sun.java.command" value="org.codehaus.plexus.classworlds.launcher.Launcher -Dtest=cl.usach.diinf.dene.Test.LabelerTest -DforkMode=once -Dmaven.surefire.debug=-Xdebug -Xrunjdwp:transport=dt_socket,server=n,address=52659 -Djpda.listen=true -Djpda.address=52659 -Dmaven.ext.class.path=C:\Program Files\NetBeans 8.1\java\maven-nblib\netbeans-eventspy.jar surefire:test"/>
+    <property name="sun.java.command" value="org.codehaus.plexus.classworlds.launcher.Launcher -Dtest=cl.usach.diinf.dene.Test.LabelerTest -Dmaven.ext.class.path=C:\Program Files\NetBeans 8.1\java\maven-nblib\netbeans-eventspy.jar surefire:test"/>
     <property name="java.specification.vendor" value="Oracle Corporation"/>
     <property name="user.language" value="es"/>
     <property name="awt.toolkit" value="sun.awt.windows.WToolkit"/>
@@ -60,16 +57,29 @@
     <property name="maven.home" value="C:\Program Files\NetBeans 8.1\java\maven"/>
     <property name="file.separator" value="\"/>
     <property name="java.vendor.url.bug" value="http://bugreport.sun.com/bugreport/"/>
-    <property name="forkMode" value="once"/>
     <property name="sun.cpu.endian" value="little"/>
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="sun.desktop" value="windows"/>
     <property name="sun.cpu.isalist" value="amd64"/>
   </properties>
-  <testcase classname="cl.usach.diinf.dene.Test.LabelerTest" name="labelTest" time="2.2">
-    <failure type="java.lang.AssertionError">java.lang.AssertionError
-	at cc.mallet.classify.NaiveBayes.classify(NaiveBayes.java:149)
-	at cl.usach.diinf.dene.Test.LabelerTest.printLabelings(LabelerTest.java:72)
+  <testcase classname="cl.usach.diinf.dene.Test.LabelerTest" name="labelTest" time="0.022">
+    <error message="Does not handle class class cc.mallet.types.FeatureVector" type="java.lang.IllegalArgumentException">java.lang.IllegalArgumentException: Does not handle class class cc.mallet.types.FeatureVector
+	at cc.mallet.pipe.Input2CharSequence.pipe(Input2CharSequence.java:53)
+	at cc.mallet.pipe.Pipe$SimplePipeInstanceIterator.next(Pipe.java:294)
+	at cc.mallet.pipe.Pipe$SimplePipeInstanceIterator.next(Pipe.java:282)
+	at cc.mallet.pipe.Pipe$SimplePipeInstanceIterator.next(Pipe.java:290)
+	at cc.mallet.pipe.Pipe$SimplePipeInstanceIterator.next(Pipe.java:282)
+	at cc.mallet.pipe.Pipe$SimplePipeInstanceIterator.next(Pipe.java:290)
+	at cc.mallet.pipe.Pipe$SimplePipeInstanceIterator.next(Pipe.java:282)
+	at cc.mallet.pipe.Pipe$SimplePipeInstanceIterator.next(Pipe.java:290)
+	at cc.mallet.pipe.Pipe$SimplePipeInstanceIterator.next(Pipe.java:282)
+	at cc.mallet.pipe.Pipe$SimplePipeInstanceIterator.next(Pipe.java:290)
+	at cc.mallet.pipe.Pipe$SimplePipeInstanceIterator.next(Pipe.java:282)
+	at cc.mallet.pipe.Pipe$SimplePipeInstanceIterator.next(Pipe.java:290)
+	at cc.mallet.pipe.Pipe$SimplePipeInstanceIterator.next(Pipe.java:282)
+	at cc.mallet.pipe.Pipe$SimplePipeInstanceIterator.next(Pipe.java:290)
+	at cc.mallet.pipe.Pipe$SimplePipeInstanceIterator.next(Pipe.java:282)
+	at cl.usach.diinf.dene.Test.LabelerTest.printLabelings(LabelerTest.java:75)
 	at cl.usach.diinf.dene.Test.LabelerTest.labelTest(LabelerTest.java:52)
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
@@ -100,8 +110,8 @@
 	at org.apache.maven.surefire.booter.SurefireStarter.invokeProvider(SurefireStarter.java:175)
 	at org.apache.maven.surefire.booter.SurefireStarter.runSuitesInProcessWhenForked(SurefireStarter.java:107)
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:68)
-</failure>
-    <system-out>name: 1473278088573
+</error>
+    <system-out>name: 1475774881062
 target: 
 input: estamos(0)=1.0
 bien(1)=1.0

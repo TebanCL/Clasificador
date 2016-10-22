@@ -16,7 +16,7 @@ public class main {
 
       TopologyBuilder builder = new TopologyBuilder();
       
-      builder.setSpout("TwitterSpout", new FakeStatusSpout(), 1);
+      builder.setSpout("TwitterSpout", new TwitterSpout(), 1);
       
       builder.setBolt("LanguageFilter", new LanguageFilter(), 4).shuffleGrouping("TwitterSpout");
       builder.setBolt("QueryFilter", new QueryFilter(), 2).shuffleGrouping("LanguageFilter");

@@ -16,6 +16,7 @@ import cc.mallet.types.Instance;
 import cc.mallet.types.InstanceList;
 import cc.mallet.types.Label;
 import cc.mallet.types.Labeling;
+import cl.usach.diinf.dene.Object.LabelRank;
 import cl.usach.diinf.dene.Object.MalletUtility;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -39,7 +40,7 @@ public class LabelerTestFromCSV {
     Instance instancia;
     
     public LabelerTestFromCSV() throws IOException, ClassNotFoundException{
-        text = "estamos bien en el refugio los treintaitres";
+        text = "@tvn_monicar mi familia esta aislada y no tenemos comunicacion con ellos. Estan en BATUCO, a 30km de TALCA hacia la costa";
         try {
             clasificador = new MalletUtility().readClassifier();            
         } catch (IOException | ClassNotFoundException ex) {
@@ -49,7 +50,7 @@ public class LabelerTestFromCSV {
        int i = 0; 
     }
     
-    @Test
+    //@Test
     public void labelTest() throws IOException{
         System.out.println("Etiqueta: "+this.getLabel(text));
         System.out.println("");
@@ -62,6 +63,7 @@ public class LabelerTestFromCSV {
         if(!this.deleteTemporalFile(file)){
             System.out.println("El archivo "+file.getName()+" no pudo ser eliminado. Eliminelo manualmente, por favor.");
         }
+        
         return result;
     }
     
@@ -114,12 +116,14 @@ public class LabelerTestFromCSV {
             //System.out.println(labeling.getBestLabel());
             // print the labels with their weights in descending order (ie best first)                     
 
+            ArrayList<LabelRank> ranking = new ArrayList();
             for (int rank = 0; rank < labeling.numLocations(); rank++){
+                ranking.add(new LabelRank(labeling.getLabelAtRank(rank).toString(), labeling.getValueAtRank(rank)));
                 System.out.print(labeling.getLabelAtRank(rank) + ":" +
                                  labeling.getValueAtRank(rank) + " ");
             }
             System.out.println();
-
+            
         }
         r.close();
         return label;

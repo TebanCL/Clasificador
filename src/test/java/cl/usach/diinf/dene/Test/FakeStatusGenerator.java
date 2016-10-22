@@ -47,16 +47,16 @@ public class FakeStatusGenerator {
     }
     
     public void prepareData() throws UnsupportedEncodingException{    
-        first = this.getFullStatusList(1000);
-        second = this.getFullStatusList(2000);
-        third = this.getFullStatusList(4000);
-        fourth = this.getFullStatusList(8000);
+       // first = this.getFullStatusList(1000);
+       // second = this.getFullStatusList(2000);
+        //third = this.getFullStatusList(4000);
+        //fourth = this.getFullStatusList(8000);
         All = this.getFullStatusList(100000);
         System.out.println("ALL SIZE:"+ All.size());
     };
     
     public ArrayList<Status> getFullStatusList(int howMany) throws UnsupportedEncodingException{
-        String FileName="C:/tweets_json2.JSON";
+        String FileName="C:/tweets_json.JSON";
         ArrayList<Status> status = new ArrayList();
         try {
                 System.out.println("Preparando lista...");

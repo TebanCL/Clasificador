@@ -30,7 +30,7 @@ public class WekaClassifier {
         rawdata = new ArrayList();
     }
    
-    @Test
+    //@Test
     public void getInstances() throws IOException{
         //csv2Arff();
         Instances inst = new Instances(new BufferedReader(new FileReader("C:\\DeNe\\data.arff")));

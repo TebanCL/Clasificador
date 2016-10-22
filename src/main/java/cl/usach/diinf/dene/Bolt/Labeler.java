@@ -16,6 +16,7 @@ import cc.mallet.classify.Classifier;
 import cc.mallet.pipe.iterator.CsvIterator;
 import cc.mallet.types.Labeling;
 import cl.usach.diinf.dene.Object.MalletUtility;
+import cl.usach.diinf.dene.Object.Normalizer;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -54,10 +55,11 @@ public class Labeler implements IRichBolt{
         Double latitud = (Double) tuple.getValueByField("latitud");
         Double longitud = (Double) tuple.getValueByField("longitud");
         inputCounter++;
-        String category = "None";
+        String category = "";
         try {
+            //text = new Normalizer().normalizeText(123, status.getText());
             category = this.getLabel(text);
-        } catch (IOException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(Labeler.class.getName()).log(Level.SEVERE, null, ex);
         }        
         elementCounter++;

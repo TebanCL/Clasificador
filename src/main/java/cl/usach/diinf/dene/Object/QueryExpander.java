@@ -19,12 +19,14 @@ public class QueryExpander {
     DB db;
     Jongo jongo;
     MongoCollection statusMongo;
+    StopwordDictionary sD;
     
     public QueryExpander(){
         
         db = new MongoClient().getDB("DeNe-test");
         jongo = new Jongo(db);
-        statusMongo = jongo.getCollection("status");  
+        statusMongo = jongo.getCollection("status"); 
+        sD = new StopwordDictionary();
     }
     
     /*Realiza la query expansion*/
@@ -47,11 +49,13 @@ public class QueryExpander {
                 if(sm.timestamp.getTime() > lastQueryDate.getTime()){
                     for(String s: sm.tweetText.split(" ")){
                         if(this.isInTheList(tt, s)){
-                            tt.get(this.indexOf(tt, s)).increaseCounter();
+                            tt.get(this.indexOf(tt, s)).increaseCounter();                                                 
                         }
                         else{
-                            ThrendingTopic newTT = new ThrendingTopic(s);
-                            tt.add(newTT);
+                            if(!sD.isStopword(s)){
+                                ThrendingTopic newTT = new ThrendingTopic(s);
+                                tt.add(newTT);
+                            }                            
                         }
                     }
                 }
